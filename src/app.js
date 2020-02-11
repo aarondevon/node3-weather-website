@@ -5,6 +5,7 @@ const forecast = require('./utils/forecast');
 const geocode = require('./utils/geocode');
 
 const app = express();
+const port = process.env.PORT || 3000;
 
 // Define paths for Express config
 const publicDirectoryPath = path.join(__dirname, '../public');
@@ -20,26 +21,26 @@ hbs.registerPartials(partialPath);
 app.use(express.static(publicDirectoryPath));
 
 app.get('', (req, res) => {
-  res.render('index', {
-    title: 'Weather',
-    name: 'Aaron Sawyer',
-  });
+	res.render('index', {
+		title: 'Weather',
+		name: 'Aaron Sawyer'
+	});
 });
 
 app.get('/about', (req, res) => {
-  res.render('about', {
-    info: 'My name is Aaron and I am a web developer.',
-    name: 'Aaron',
-    title: 'About',
-  });
+	res.render('about', {
+		info: 'My name is Aaron and I am a web developer.',
+		name: 'Aaron',
+		title: 'About'
+	});
 });
 
 app.get('/help', (req, res) => {
-  res.render('help', {
-    info: 'To get help please call 555-555-5555 or email us at help@youareawesome.com',
-    name: 'Aaron',
-    title: 'Help',
-  });
+	res.render('help', {
+		info: 'To get help please call 555-555-5555 or email us at help@youareawesome.com',
+		name: 'Aaron',
+		title: 'Help'
+	});
 });
 
 app.get('/weather', (req, res) => {
@@ -48,13 +49,13 @@ app.get('/weather', (req, res) => {
 			error: 'You must provide and address!'
 		});
 	}
-  
+
 	const address = req.query.address;
-	geocode(address, (error, {latitude, longitude, location} = {}) => {
+	geocode(address, (error, { latitude, longitude, location } = {}) => {
 		if (error) {
 			return res.send({ error });
 		}
-      
+
 		forecast(latitude, longitude, (error, forecastData) => {
 			if (error) {
 				return res.send({ error });
@@ -62,12 +63,12 @@ app.get('/weather', (req, res) => {
 			res.send({
 				location,
 				address: req.query.address,
-				forecastData: forecastData,
+				forecastData: forecastData
 			});
-			console.log(`${location}`)
-			console.log('Data:', forecastData)
-		})
-	})
+			console.log(`${location}`);
+			console.log('Data:', forecastData);
+		});
+	});
 });
 
 // app.get('/products', (req, res) => {
@@ -84,21 +85,21 @@ app.get('/weather', (req, res) => {
 // });
 
 app.get('/help/*', (req, res) => {
-  res.render('404', {
-    errorMessage: 'Help article not found.',
-    name: 'Aaron Sawyer',
-    title: '404',
-  });
+	res.render('404', {
+		errorMessage: 'Help article not found.',
+		name: 'Aaron Sawyer',
+		title: '404'
+	});
 });
 
 app.get('*', (reg, res) => {
-  res.render('404', {
-    errorMessage: 'Page not found.',
-    name: 'Aaron Sawyer',
-    title: '404',
-  });
+	res.render('404', {
+		errorMessage: 'Page not found.',
+		name: 'Aaron Sawyer',
+		title: '404'
+	});
 });
 
-app.listen(3000, () => {
-  console.log('Server is up on port 3000.');
+app.listen(port, () => {
+	console.log(`Server is up on port ${port}.`);
 });
